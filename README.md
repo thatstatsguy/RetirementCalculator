@@ -39,4 +39,5 @@ It would be fairly easy to bring together the project in a single application, b
 Useful guides for referencing in future
 
 ### Rust
-[Setting up Rust in Windows](https://www.twelve21.io/getting-started-with-rust-on-windows-and-visual-studio-code/#:~:text=Interestingly%20enough%2C%20the%20Rust%20compiler%20requires%20the%20Microsoft,the%20Visual%20Studio%20Build%20Tools%202019%20version%20here.)
+[Setting up Rust in VS Code](https://www.twelve21.io/getting-started-with-rust-on-windows-and-visual-studio-code/#:~:text=Interestingly%20enough%2C%20the%20Rust%20compiler%20requires%20the%20Microsoft,the%20Visual%20Studio%20Build%20Tools%202019%20version%20here.)
+[Language Intro](https://doc.rust-lang.org/book/ch00-00-introduction.html)
