@@ -28,7 +28,7 @@ It would be fairly easy to bring together the project in a single application, b
 1. Domain Driven Design 
     - the aim is to revisit domain events prior to and during the building phase as an experiment in capturing all domain events and actors.
 2. Rust schenanigans
-    - The server doing the calculations will be in rust (which I know nothing about)
+    - The server doing the calculations will be in rust (which I'll be learning about as I go along)
 3. Microservice communication via queues
     - because I want to play around with queues 
 4. Some kind of visualisation library
@@ -39,5 +39,5 @@ It would be fairly easy to bring together the project in a single application, b
 Useful guides for referencing in future
 
 ### Rust
-[Setting up Rust in VS Code](https://www.twelve21.io/getting-started-with-rust-on-windows-and-visual-studio-code/#:~:text=Interestingly%20enough%2C%20the%20Rust%20compiler%20requires%20the%20Microsoft,the%20Visual%20Studio%20Build%20Tools%202019%20version%20here.)
-[Language Intro](https://doc.rust-lang.org/book/ch00-00-introduction.html)
+- [Setting up Rust in VS Code](https://www.twelve21.io/getting-started-with-rust-on-windows-and-visual-studio-code/#:~:text=Interestingly%20enough%2C%20the%20Rust%20compiler%20requires%20the%20Microsoft,the%20Visual%20Studio%20Build%20Tools%202019%20version%20here.)
+- [Language Intro](https://doc.rust-lang.org/book/ch00-00-introduction.html)
