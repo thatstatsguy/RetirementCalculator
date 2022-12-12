@@ -1,10 +1,8 @@
-## Configuration
+## Events
 
 ```mermaid
   graph LR;
-      id1(User Clicks Add Payment)-->B;
-```
-```mermaid
-  graph LR;
-      A-->C;
+      id1(User Adds Contribution to Existing Invesment Profile);
+      id3(User Adds Contribution to New Invesment Profile);
+      id2(User Calculates Invesment Results Contribution to Invesment Profile);
 ```

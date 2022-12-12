@@ -1,0 +1,78 @@
+@using MudBlazor
+@using client.Data.API
+
+@if(_series.Count != 0)
+{
+    <div>
+        <MudChart ChartType="ChartType.Line" ChartSeries="@_series" XAxisLabels="@_xAxisLabels" Width="100%" Height="350" ChartOptions="_options"></MudChart>
+    </div>      
+    <div>
+        <MudSimpleTable Style="overflow-x: scroll; max-width: 75vw">
+            <thead>
+                <th>Strategy</th>
+                @foreach (var label in _xAxisLabels)
+                {
+                    <th style="text-align: center">@label</th>
+                }
+            </thead>
+            <tbody>
+                @foreach (var result in InputResults)
+                {
+                    <tr>
+                        <th>@result.Name</th>
+                        @foreach (var year in result.InvestmentReturns)
+                        {
+                            <td>@year</td>    
+                        }    
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
+    </div>
+}
+
+@code {
+
+    #region ComponentInputs
+
+    [Parameter]
+    public List<ProfileResults> InputResults { get; set; } = new ();
+
+    #endregion
+    #region Chart Properties
+
+    private readonly ChartOptions _options = new ChartOptions();
+
+    private List<ChartSeries> _series = new ();
+    
+    private string[] _xAxisLabels = {};
+
+    #endregion
+    
+    protected override void OnInitialized()
+    {
+        _options.InterpolationOption = InterpolationOption.NaturalSpline;
+
+        var maxYears =
+            InputResults
+                .Select(x => x.InvestmentReturns.Length)
+                .Max();
+        
+        _xAxisLabels =
+            Enumerable.Range(1, maxYears)
+                .Select(x => x.ToString())
+                .ToArray();
+
+        _series =
+            InputResults
+                .Select(x => new ChartSeries() { Name = x.Name, Data = x.InvestmentReturns })
+                .ToList();
+
+        StateHasChanged();
+        
+    }
+
+    
+
+
+}

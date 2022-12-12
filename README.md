@@ -3,14 +3,25 @@
 ## TLDR
 This is a fun application which gives users a graphical illustration of how their choices for retirement contributions affect their lump sums for retirement retirement.
 
+Users can set assumptions for their salary, return on invesment and set various investment strategies
+
+![Overview](Media/Overview.png)
+
+You can add various invesment profiles by setting up contribution details e.g. 15% for 5 years and 10% for 35. As an example, the image below shows the strategies set up.
+
+![Strategies](Media/Strategies.png)
+
+The results can then be viewed
+
+![Results](Media/Results.png)
 ## More info
 
 ## Problem Statement
-We all want to retire comfortably, but it's sometimes difficult to visualise how contributions you make today affect your retirement in 40 years from now.
+It's difficult to visualise how contributions you make today affect your retirement in 40 years from now.
 
 This application allows you to set your contributions for X years and arbitrarily change it for various intervals.
 
-Why bother with something like this? When I started working, I always wondered
+The application addresses the following issue.
 > I currently contribute X% to my retirement
 > savings. 
 >
@@ -20,20 +31,8 @@ Why bother with something like this? When I started working, I always wondered
 > retirement contributions?
 
 
-This application aims to address the above question in an interactive way.
-
 ## The Technical Stuff
-It would be fairly easy to bring together the project in a single application, but what's the fun in that. The following topics will be touched while building this application. 
-
-1. Domain Driven Design 
-    - the aim is to revisit domain events prior to and during the building phase as an experiment in capturing all domain events and actors.
-2. Rust schenanigans
-    - The server doing the calculations will be in rust (which I'll be learning about as I go along)
-3. Microservice communication via queues
-    - because I want to play around with queues 
-4. Some kind of visualisation library
-5. Docker compose to tie the application together.
-
+- The current current implementation uses a rust rest API and a blazor front end. 
 ## Resources
 
 Useful guides for referencing in future

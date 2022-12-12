@@ -1,0 +1,30 @@
+@using MudBlazor
+@using client.Data
+
+<span class="border border-dark mb-3 p-3 rounded-3" style="min-height: 200px; display: block">
+    <h5>Investment Strategy</h5>
+    @if (Strategies.Count != 0)
+    {
+        
+        <MudTreeView T="string">
+            @foreach (var strategy in Strategies)
+            {
+                <MudTreeViewItem Value="@strategy.Key">
+                    @foreach (var strategyPeriod in strategy.Value)
+                    {
+                        <MudTreeViewItem Value="@($"Years: {strategyPeriod.years}, Percentage Contributions {strategyPeriod.percentage_contributions}")"/>
+                    }
+
+                </MudTreeViewItem>
+            }
+
+        </MudTreeView>
+    }
+</span>
+
+@code {
+
+    [Parameter]
+    public Dictionary<string, List<ContributionSubmission>> Strategies { get; set; } = new ();
+
+}

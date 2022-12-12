@@ -1,0 +1,131 @@
+﻿@page "/"
+@using client.Data
+@using client.Data.API
+@using Newtonsoft.Json;
+@using System.Text
+<PageTitle>Retirement Calculator</PageTitle>
+
+<span class="border border-dark mb-3 p-3 rounded-3" style="min-height: 200px; display: block">
+    <h5>Salary and Investment Details</h5>
+    @* Bootstrap equvialent to EditForm? *@
+    <form>
+        <div class="form-group">
+            <label>Gross Salary</label>
+            <input class="form-control" @bind="GrossSalary">
+            <small>Enter amount without rand sign without special formatting e.g. 100000</small>
+        </div>
+        <div class="form-group">
+            <label>Compunding Interval</label>
+            <input class="form-control" type="text" placeholder="@CompoundingInterval" readonly>
+            <small>Fixed to simplify calculations</small>
+        </div>
+        <div class="form-group">
+            <label>Return on Investment Per Annum</label>
+            <input class="form-control" @bind="YearlyReturnOnInvestment" placeholder="Enter percentage amount. E.g. 0.05 = 5% roi p.a">
+            <small>Assumed to be the same for all years. This is to simplify calculations</small>
+        </div>
+    </form>
+</span>
+<span class="border border-dark mb-3 p-3 rounded-3" style="min-height: 200px; display: block">
+    <h5>Contribution Details</h5>
+    @* Trying out EditForm with a model *@
+    <EditForm Model="@CurrentSubmissionForm" OnValidSubmit="AddNewSubmission" class="mb-3"> 
+        <div class="form-group">
+            <label>Years</label>
+            <input class="form-control" @bind="CurrentSubmissionForm.years" placeholder="Enter number of years to make specified contribution.">
+        </div>
+        <div class="form-group">
+            <label>Percentage Contribution</label>
+            <input class="form-control" @bind="CurrentSubmissionForm.percentage_contributions">
+        </div>
+        <div class="form-group">
+            <label>Investment Strategy</label>
+            <input class="form-control" @bind="InvestmentProfile">
+            <small>
+                Add to if building several scenarios to be compared.
+                Leave blank if for a simple scenario.
+            </small>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Add Contribution Details</button>
+    </EditForm>
+</span>
+<InvestmentStrategyTreeView Strategies="ContributionSubmissions"></InvestmentStrategyTreeView>
+
+<button type="submit" class="btn btn-primary mb-3" @onclick="CalculateResults">Calculate Results!</button>
+
+@if (Results.Count != 0)
+{
+    <span class="border border-dark mb-3 p-3 rounded-3" style="min-height: 200px; display: block">
+        <h5>Results</h5>
+        <InvestmentResults InputResults="Results"></InvestmentResults>
+    </span>
+    
+}
+
+@code{
+
+    #region User Input Properties
+
+    private double GrossSalary { get; set; } = 100000;
+    private double YearlyReturnOnInvestment { get; set; } = 0.05;
+    private ContributionSubmission CurrentSubmissionForm { get; set; } = new ( 1,0.05); 
+    private const string CompoundingInterval = "Monthly";
+    private string InvestmentProfile { get; set; } = "";
+    private Dictionary<string,List<ContributionSubmission>> ContributionSubmissions { get; } = new();
+    #endregion
+
+    #region Result Properties
+
+    private List<ProfileResults> Results { get; }= new();
+
+    #endregion
+    #region Methods
+
+    private void AddNewSubmission()
+    {
+        if (ContributionSubmissions.ContainsKey(InvestmentProfile))
+        {
+            ContributionSubmissions[InvestmentProfile].Add(CurrentSubmissionForm);
+        }
+        else
+        {
+            ContributionSubmissions.Add(InvestmentProfile, new (){CurrentSubmissionForm});
+        }
+        CurrentSubmissionForm = new ContributionSubmission( 1,0.05);
+        StateHasChanged();
+    }
+
+    private async void CalculateResults()
+    {
+        
+        try
+        {
+            foreach (var profile in ContributionSubmissions)
+            {
+                var apiRequestBody =
+                    new StringContent(JsonConvert.SerializeObject(new APISubmission(profile.Value, GrossSalary,YearlyReturnOnInvestment)), Encoding.UTF8, "application/json");
+
+                using var client = new HttpClient();
+                client.Timeout = TimeSpan.FromMinutes(10);
+
+                using HttpResponseMessage res = await client.PostAsync("http://127.0.0.1:8000/calculatefuturevaluebyyear", apiRequestBody);
+                using HttpContent content = res.Content;
+                var apiResults = await content.ReadFromJsonAsync<double[]>() ?? Array.Empty<double>();
+                Results.Add(new(profile.Key, apiResults));
+                
+            }
+            
+            StateHasChanged();
+
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    #endregion
+    
+
+}
